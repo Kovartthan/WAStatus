@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
+    <string name="start">Get Started</string>
+    <string name="des_slider_one">Watch your friends WhatsApp status and share it to your status without downloading</string>
+    <string name="title">Welcome to WAStatus</string>
+    <string name="desc_two">You can move your status to the gallery directly from the app</string>
+    <string name="desc_three">Share other contacts status directly to your Whatsapp contacts or you can upload it to your status</string>
+</resources>

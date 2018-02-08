@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/red_400">
+
+    <com.ko.wastatus.ui.FontedTextView
+        android:layout_marginTop="30dp"
+        android:textSize="22sp"
+        android:padding="5dp"
+        app:typeface="fabrica"
+        android:gravity="center"
+        android:textColor="@color/gen_white"
+        android:text="@string/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/img_slide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/share" />
+
+    <com.ko.wastatus.ui.FontedTextView
+        android:textSize="16sp"
+        android:padding="10dp"
+        app:typeface="fabrica"
+        android:gravity="center"
+        android:layout_below="@+id/img_slide"
+        android:text="@string/desc_three"
+        android:textColor="@color/gen_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

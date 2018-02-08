@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--TextView, EditText, Button stylea-->
+        <declare-styleable name="FontTypeface">
+            <attr name="typeface" format="integer">
+                <enum name="fabrica" value="0x0" />
+                <enum name="roboto_bold" value="0x1" />
+                <enum name="roboto_bold_italic" value="0x2" />
+                <enum name="roboto_italic" value="0x3" />
+                <enum name="roboto_light" value="0x4" />
+                <enum name="roboto_light_italic" value="0x5" />
+                <enum name="roboto_medium" value="0x6" />
+                <enum name="roboto_medium_italic" value="0x7" />
+                <enum name="roboto_regular" value="0x8" />
+                <enum name="roboto_thin" value="0x9" />
+                <enum name="roboto_thin_italic" value="0x10" />
+            </attr>
+
+        </declare-styleable>
+</resources>
