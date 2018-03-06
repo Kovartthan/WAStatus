@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">WA Status Saver</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="start">Get Started</string>
@@ -7,4 +7,25 @@
     <string name="title">Welcome to WAStatus</string>
     <string name="desc_two">You can move your status to the gallery directly from the app</string>
     <string name="desc_three">Share other contacts status directly to your Whatsapp contacts or you can upload it to your status</string>
+    <string name="err_msg_one">Oops ! you have no saved story till</string>
+    <string name="err_msg_two">Oops ! you didn\'t seen a single story yet in Whatsapp today </string>
+    <string name="title_activity_settings">Settings</string>
+
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_title_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">Daily notification</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="notifications_new_message">notifications_new_message</string>
+    <string name="key_notifications_new_message_ringtone">key_notifications_new_message_ringtone</string>
+    <string name="key_vibrate">key_vibrate</string>
+    <string name="summary_choose_ringtone">Choose notification sound</string>
+    <string name="key_video_thumbnail_quality">key_video_thumbnail_quality</string>
+    <string name="key_select_theme">key_select_theme</string>
 </resources>

@@ -5,5 +5,13 @@ package com.ko.wastatus.utils;
  */
 
 public interface Constants {
-    String WHATSAPP_STATUSES_LOCATION = "/WhatsApp/Media/.Statuses";
+    String WHATSAPP_STATUSES_LOCATION = "/WhatsApp/Media/.Statuses/";
+    int RC_STORAGE_CODE = 100;
+    String WA_SAVER_DIRECTORY_LOCATION = "/WASaver/";
+    String IMAGE_DIRECTORY_LOCATION = "/WASaver/Images/";
+    String VIDEO_DIRECTORY_LOCATION = "/WASaver/Videos/";
+    String PHOTO_PATH = "photo_path" ;
+     int THEME_BLUE = 2;
+     int THEME_RED = 0;
+     int THEME_GREEN = 1;
 }

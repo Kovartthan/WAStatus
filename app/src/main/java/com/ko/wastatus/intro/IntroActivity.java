@@ -2,6 +2,7 @@ package com.ko.wastatus.intro;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ko.wastatus.R;
+import com.ko.wastatus.home.activities.HomeActivity;
 
 public class IntroActivity extends AppCompatActivity {
     private ViewPager viewPager;
@@ -39,10 +41,10 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private void init() {
-        viewPager = findViewById(R.id.view_pager);
-        dotsLayout = findViewById(R.id.layoutDots);
-        btnSkip = findViewById(R.id.btn_skip);
-        btnNext = findViewById(R.id.btn_next);
+        viewPager = (ViewPager)findViewById(R.id.view_pager);
+        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
+        btnSkip =  (Button)findViewById(R.id.btn_skip);
+        btnNext = (Button) findViewById(R.id.btn_next);
         myViewPagerAdapter = new MyViewPagerAdapter();
         // layouts of all welcome sliders
         // add few more layouts if you want
@@ -80,6 +82,8 @@ public class IntroActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(current);
                 } else {
 //                    launchHomeScreen();
+                    startActivity(new Intent(IntroActivity.this, HomeActivity.class));
+                    finish();
                 }
             }
         });

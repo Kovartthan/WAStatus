@@ -6,7 +6,7 @@
     android:background="@color/red_400">
 
     <com.ko.wastatus.ui.FontedTextView
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:textSize="22sp"
         android:padding="5dp"
         app:typeface="fabrica"

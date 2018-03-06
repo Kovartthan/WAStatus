@@ -4,7 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.ko.wastatus.preference.WAPreference;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class WAApp extends Application {
@@ -15,6 +19,11 @@ public class WAApp extends Application {
         super.onCreate();
         mInstance = this;
         waPreference = new WAPreference(this);
+        FirebaseAnalytics.getInstance(this);
+        final Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics())
+        .debuggable(true) // Enables Crashlytics debugger
+        .build();
+        Fabric.with(fabric);
     }
 
     public static WAApp getApp() {

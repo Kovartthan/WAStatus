@@ -86,7 +86,7 @@
 //
 //import static com.ciceroneme.android.utils.AlertUtils.getBuilder;
 //
-//public class ProfileCommentListActivity extends BaseActivity implements OnDeleteTipListener,OnMediaInstanceListener {
+//public class ImageStoryListAdapter extends BaseActivity implements OnDeleteTipListener,OnMediaInstanceListener {
 //    private RecyclerView rvCommentList;
 //    private ProfileCommentListExoAdapter profileCommentListAdapter;
 //    private ArrayList<ProfileCommentListParser.MapLocationCommentList> commentList;
@@ -230,7 +230,7 @@
 //        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_to_refresh);
 //        rvCommentList = (RecyclerView) findViewById(R.id.rv_comment_list);
 //        surfaceView = (VideoSurfaceView) findViewById(R.id.surface_view);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ProfileCommentListActivity.this);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ImageStoryListAdapter.this);
 //        rvCommentList.setLayoutManager(linearLayoutManager);
 //
 //    }
@@ -248,7 +248,7 @@
 //        address = getIntent().getStringExtra(AppConstants.ADDRESS);
 //        mapUrl = getIntent().getStringExtra(AppConstants.LOCATION_IMAGE);
 //
-//        profileCommentListAdapter = new ProfileCommentListExoAdapter(this, ProfileCommentListActivity.this, commentList, rvCommentList, getApp().getCnPrefernce().getUserId(),mapName,locationName);
+//        profileCommentListAdapter = new ProfileCommentListExoAdapter(this, ImageStoryListAdapter.this, commentList, rvCommentList, getApp().getCnPrefernce().getUserId(),mapName,locationName);
 //        profileCommentListAdapter.setOnDeleteTipListener(this);
 //        rvCommentList.setAdapter(profileCommentListAdapter);
 //
@@ -266,8 +266,8 @@
 //
 //    private void getCommentListWebService(final boolean isShowProgress, final boolean isLoading, final boolean isDelete) {
 //
-//        if (!BDevice.isInternetConnected(ProfileCommentListActivity.this)) {
-//            AlertUtils.showSnack(ProfileCommentListActivity.this, rvCommentList, getString(R.string.check_your_internet_connection));
+//        if (!BDevice.isInternetConnected(ImageStoryListAdapter.this)) {
+//            AlertUtils.showSnack(ImageStoryListAdapter.this, rvCommentList, getString(R.string.check_your_internet_connection));
 //            return;
 //        }
 //
@@ -305,7 +305,7 @@
 //                }
 //
 //                profileCommentListAdapter.notifyDataSetChanged();
-//                profileCommentListAdapter.setOnMediaInstanceListener(ProfileCommentListActivity.this);
+//                profileCommentListAdapter.setOnMediaInstanceListener(ImageStoryListAdapter.this);
 //                swipeRefreshLayout.setRefreshing(false);
 //                profileCommentListAdapter.setLoaded();
 //                isWebserviceRunning = false;
@@ -323,7 +323,7 @@
 //                    swipeRefreshLayout.setRefreshing(false);
 //                }
 //                isWebserviceRunning = false;
-//                AlertUtils.showAlert(ProfileCommentListActivity.this, getString(R.string.app_name), message);
+//                AlertUtils.showAlert(ImageStoryListAdapter.this, getString(R.string.app_name), message);
 //            }
 //        });
 //    }
@@ -347,11 +347,11 @@
 //                    Log.e("load more", "starts");
 //                    profileCommentListAdapter.addList();
 //                    profileCommentListAdapter.notifyItemInserted(profileCommentListAdapter.getItemCount() + 1);
-//                    if (BDevice.isInternetConnected(ProfileCommentListActivity.this)) {
+//                    if (BDevice.isInternetConnected(ImageStoryListAdapter.this)) {
 //                        page++;
 //                        getCommentListWebService(false, true, false);
 //                    } else {
-//                        AlertUtils.showAlert(ProfileCommentListActivity.this, getString(R.string.app_name), getString(R.string.check_your_internet_connection));
+//                        AlertUtils.showAlert(ImageStoryListAdapter.this, getString(R.string.app_name), getString(R.string.check_your_internet_connection));
 //                    }
 //                }
 //
@@ -366,7 +366,7 @@
 //
 //    @Override
 //    public void onViewAllTip(final int userId, final int position, final ProfileCommentListParser.MapLocationCommentList tip) {
-//        AlertDialog.Builder builder = getBuilder(ProfileCommentListActivity.this);
+//        AlertDialog.Builder builder = getBuilder(ImageStoryListAdapter.this);
 //        String[] listItem = {getString(R.string.edit_tip), getString(R.string.delete_tip)};
 //        builder.setTitle(getResources().getString(R.string.select)).setItems(listItem, new DialogInterface.OnClickListener() {
 //            @Override
@@ -376,7 +376,7 @@
 //                    showLeaveTipDialog(tip);
 //                } else {
 //                    dialog.dismiss();
-//                    AlertUtils.showConfirmationDialog(ProfileCommentListActivity.this, R.string.app_name, R.string.alert_delete_confirm_comment, R.string.yes_small, R.string.no_small, false, new DialogInterface.OnClickListener() {
+//                    AlertUtils.showConfirmationDialog(ImageStoryListAdapter.this, R.string.app_name, R.string.alert_delete_confirm_comment, R.string.yes_small, R.string.no_small, false, new DialogInterface.OnClickListener() {
 //                        @Override
 //                        public void onClick(DialogInterface dialog, int which) {
 //                            deleteTipWebService(userId, position);
@@ -395,8 +395,8 @@
 //
 //
 //    private void deleteTipWebService(int id, final int position) {
-//        if (!BDevice.isInternetConnected(ProfileCommentListActivity.this)) {
-//            AlertUtils.showSnack(ProfileCommentListActivity.this, rvCommentList, getString(R.string.check_your_internet_connection));
+//        if (!BDevice.isInternetConnected(ImageStoryListAdapter.this)) {
+//            AlertUtils.showSnack(ImageStoryListAdapter.this, rvCommentList, getString(R.string.check_your_internet_connection));
 //            return;
 //        }
 //
@@ -416,7 +416,7 @@
 //                    JSONObject meta = obj.getJSONObject("meta");
 //                    String notification = obj.optString("notifications");
 //                    isDelete = true;
-//                    AlertUtils.showAlert(ProfileCommentListActivity.this, getString(R.string.app_name), notification, new DialogInterface.OnClickListener() {
+//                    AlertUtils.showAlert(ImageStoryListAdapter.this, getString(R.string.app_name), notification, new DialogInterface.OnClickListener() {
 //                        @Override
 //                        public void onClick(DialogInterface dialog, int which) {
 //                            profileCommentListAdapter.removeItem(position);
@@ -440,7 +440,7 @@
 //                if (ceProgressDialog != null && ceProgressDialog.isShowing()) {
 //                    ceProgressDialog.dismiss();
 //                }
-//                AlertUtils.showAlert(ProfileCommentListActivity.this, getString(R.string.app_name), message);
+//                AlertUtils.showAlert(ImageStoryListAdapter.this, getString(R.string.app_name), message);
 //            }
 //        });
 //    }
@@ -585,7 +585,7 @@
 //        });
 //
 //
-//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, BDevice.getPixelFromDp(ProfileCommentListActivity.this, 200));
+//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, BDevice.getPixelFromDp(ImageStoryListAdapter.this, 200));
 //        rlAddPhoto.setLayoutParams(layoutParams);
 //
 //        if (tip != null) {
@@ -606,7 +606,7 @@
 //                    imagevideoLayout.setVisibility(View.VISIBLE);
 //                    imgHeaderImage.setVisibility(View.VISIBLE);
 //                    videoProgress.setVisibility(View.VISIBLE);
-//                    Glide.with(ProfileCommentListActivity.this).load(tip.media).placeholder(R.drawable.media).listener(new RequestListener<String, GlideDrawable>() {
+//                    Glide.with(ImageStoryListAdapter.this).load(tip.media).placeholder(R.drawable.media).listener(new RequestListener<String, GlideDrawable>() {
 //                        @Override
 //                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
 //                            videoProgress.setVisibility(View.GONE);
@@ -629,7 +629,7 @@
 //                    imagevideoLayout.setVisibility(View.VISIBLE);
 //                    videoProgress.setVisibility(View.VISIBLE);
 //                    imgHeaderImage.setVisibility(View.VISIBLE);
-//                    Glide.with(ProfileCommentListActivity.this).load(tip.media_thumb_image).placeholder(R.drawable.media).listener(new RequestListener<String, GlideDrawable>() {
+//                    Glide.with(ImageStoryListAdapter.this).load(tip.media_thumb_image).placeholder(R.drawable.media).listener(new RequestListener<String, GlideDrawable>() {
 //                        @Override
 //                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
 //                            imagePlay.setVisibility(View.VISIBLE);
@@ -677,13 +677,13 @@
 //            }
 //        });
 //
-//        final String userAgent = Util.getUserAgent(ProfileCommentListActivity.this, "CICERONEMeApp");
+//        final String userAgent = Util.getUserAgent(ImageStoryListAdapter.this, "CICERONEMeApp");
 //        imagePlay.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //                videoProgress.setVisibility(View.VISIBLE);
 //                if (!isLeaveDialogVideoStarted) {
-//                    leaveDialogExoPlayer = new DemoPlayer(new ExtractorRendererBuilder(ProfileCommentListActivity.this, userAgent, uri));
+//                    leaveDialogExoPlayer = new DemoPlayer(new ExtractorRendererBuilder(ImageStoryListAdapter.this, userAgent, uri));
 //                    leaveDialogExoPlayer.prepare();
 //                    leaveDialogExoPlayer.setSurface(videoView.getSurface());
 //                    isLeaveDialogVideoStarted = true;
@@ -719,7 +719,7 @@
 //                                int stringId = Util.SDK_INT < 18 ? R.string.drm_error_not_supported
 //                                        : unsupportedDrmException.reason == UnsupportedDrmException.REASON_UNSUPPORTED_SCHEME
 //                                        ? R.string.drm_error_unsupported_scheme : R.string.drm_error_unknown;
-//                                Toast.makeText(ProfileCommentListActivity.this, stringId, Toast.LENGTH_LONG).show();
+//                                Toast.makeText(ImageStoryListAdapter.this, stringId, Toast.LENGTH_LONG).show();
 //                            }
 //                        }
 //
@@ -783,7 +783,7 @@
 //                        launchGallery();
 //                    }
 //                } else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-//                    if (ActivityCompat.shouldShowRequestPermissionRationale(ProfileCommentListActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//                    if (ActivityCompat.shouldShowRequestPermissionRationale(ImageStoryListAdapter.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 //                    } else {
 //                        if (isPermissionDefaults) {
 //                            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -802,7 +802,7 @@
 //                        launchCamera();
 //                    }
 //                } else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-//                    if (ActivityCompat.shouldShowRequestPermissionRationale(ProfileCommentListActivity.this, Manifest.permission.CAMERA)) {
+//                    if (ActivityCompat.shouldShowRequestPermissionRationale(ImageStoryListAdapter.this, Manifest.permission.CAMERA)) {
 //                    } else {
 //                        if (isPermissionDefaults) {
 //                            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
@@ -821,7 +821,7 @@
 //                        launchCameraForVideo();
 //                    }
 //                } else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-//                    if (ActivityCompat.shouldShowRequestPermissionRationale(ProfileCommentListActivity.this, Manifest.permission.RECORD_AUDIO)) {
+//                    if (ActivityCompat.shouldShowRequestPermissionRationale(ImageStoryListAdapter.this, Manifest.permission.RECORD_AUDIO)) {
 //                    } else {
 //                        if (isPermissionDefaults) {
 //                            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
@@ -839,7 +839,7 @@
 //                        checkMicroPhonePermision();
 //                    }
 //                } else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-//                    if (ActivityCompat.shouldShowRequestPermissionRationale(ProfileCommentListActivity.this, Manifest.permission.CAMERA)) {
+//                    if (ActivityCompat.shouldShowRequestPermissionRationale(ImageStoryListAdapter.this, Manifest.permission.CAMERA)) {
 //                    } else {
 //                        if (isPermissionDefaults) {
 //                            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
@@ -859,8 +859,8 @@
 //
 //    private void setVideoSize(int width , int height) {
 //        // Get the width of the screen
-//        int screenWidth = BDevice.getScreenWidth(ProfileCommentListActivity.this);
-//        int screenHeight = BDevice.getScreenHeight(ProfileCommentListActivity.this);
+//        int screenWidth = BDevice.getScreenWidth(ImageStoryListAdapter.this);
+//        int screenHeight = BDevice.getScreenHeight(ImageStoryListAdapter.this);
 //        // // Get the dimensions of the video
 //        int videoWidth = width;
 //        int videoHeight = height;//screenHeight * 80 / 100;
@@ -883,7 +883,7 @@
 //
 //    private void onCreateDialogForAddPhoto() {
 //        mediaPlayer = null;
-//        AlertDialog.Builder builder = getBuilder(ProfileCommentListActivity.this);
+//        AlertDialog.Builder builder = getBuilder(ImageStoryListAdapter.this);
 //        String[] listItem = {getString(R.string.take_photo), getString(R.string.take_video), getString(R.string.gallery)};
 //        builder.setTitle(getResources().getString(R.string.select)).setItems(listItem, new DialogInterface.OnClickListener() {
 //            @Override
@@ -893,7 +893,7 @@
 //                    currentlyCliked = "camera";
 //                    String permission = Manifest.permission.CAMERA;
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                        if (ContextCompat.checkSelfPermission(ProfileCommentListActivity.this, permission) == PackageManager.PERMISSION_GRANTED) {
+//                        if (ContextCompat.checkSelfPermission(ImageStoryListAdapter.this, permission) == PackageManager.PERMISSION_GRANTED) {
 //                            launchCamera();
 //                        } else {
 //                            checkCameraPermision();
@@ -909,7 +909,7 @@
 //                    String permissionAudio = Manifest.permission.RECORD_AUDIO;
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //
-//                        if ((ContextCompat.checkSelfPermission(ProfileCommentListActivity.this, permission) == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(ProfileCommentListActivity.this, permissionAudio) == PackageManager.PERMISSION_GRANTED)) {
+//                        if ((ContextCompat.checkSelfPermission(ImageStoryListAdapter.this, permission) == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(ImageStoryListAdapter.this, permissionAudio) == PackageManager.PERMISSION_GRANTED)) {
 //                            Log.d("PermiscnCheck", "in already given");
 //
 //                            launchCameraForVideo();
@@ -930,7 +930,7 @@
 //                    currentlyCliked = "gallery";
 //                    String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                        if (ContextCompat.checkSelfPermission(ProfileCommentListActivity.this, permission) == PackageManager.PERMISSION_GRANTED) {
+//                        if (ContextCompat.checkSelfPermission(ImageStoryListAdapter.this, permission) == PackageManager.PERMISSION_GRANTED) {
 //                            launchGallery();
 //                        } else {
 //                            checkSDCardPermission();
@@ -961,7 +961,7 @@
 //        // intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, (1024 * 1024));
 //        // intent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, 0);
 //
-//        picUri = FileProvider.getUriForFile(ProfileCommentListActivity.this, BuildConfig.APPLICATION_ID + ".provider", FileUtils.createMapImageOrVideoFile(this, "photo"));
+//        picUri = FileProvider.getUriForFile(ImageStoryListAdapter.this, BuildConfig.APPLICATION_ID + ".provider", FileUtils.createMapImageOrVideoFile(this, "photo"));
 //
 //        intent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
 //        List<ResolveInfo> resInfoList = getApplicationContext().getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
@@ -975,7 +975,7 @@
 //    }
 //
 //    private void launchCameraForVideo() {
-//        Intent intent = new Intent(ProfileCommentListActivity.this, BTRecorderActivity.class);
+//        Intent intent = new Intent(ImageStoryListAdapter.this, BTRecorderActivity.class);
 //        startActivityForResult(intent, REQUEST_VIDEO);
 //
 //    }
@@ -1065,11 +1065,11 @@
 //                multipart.addFormField("type", String.valueOf(type));
 //                if(isImageOrVideoPlaced) {
 //                    if (editCommentAttachment == 1 || editCommentAttachment == 2) {
-//                        File pictureFolder = new File(ProfileCommentListActivity.this.getExternalCacheDir(), "create_map/photo/map_photo.jpg");
+//                        File pictureFolder = new File(ImageStoryListAdapter.this.getExternalCacheDir(), "create_map/photo/map_photo.jpg");
 //                        multipart.addFilePart("picture", pictureFolder);
 //                    }
 //                    if (editCommentAttachment == 2) {
-//                        File videoFolder = new File(ProfileCommentListActivity.this.getExternalCacheDir(), "create_map/video/map_video.mp4");
+//                        File videoFolder = new File(ImageStoryListAdapter.this.getExternalCacheDir(), "create_map/video/map_video.mp4");
 //                        multipart.addFilePart("video", videoFolder);
 //                    }
 //                }
@@ -1217,7 +1217,7 @@
 //            try {
 //                InputStream inputStream;
 //                if (TextUtils.isEmpty(inputStreamLocation)) {
-//                    inputStream = ProfileCommentListActivity.this.getContentResolver().openInputStream(inputSteamUri);
+//                    inputStream = ImageStoryListAdapter.this.getContentResolver().openInputStream(inputSteamUri);
 //                } else {
 //                    inputStream = new FileInputStream(inputStreamLocation);
 //                }
@@ -1233,7 +1233,7 @@
 //        @Override
 //        protected void onPostExecute(String result) {
 //            ceProgressDialog.dismiss();
-//            if (ProfileCommentListActivity.this != null) {
+//            if (ImageStoryListAdapter.this != null) {
 //                try {
 //                    mediaPlayer = null;
 //                    if (!TextUtils.isNullOrEmpty(outputStreamLocation)) {
@@ -1261,7 +1261,7 @@
 //                            //save teh thump in photo location
 //
 //                            String thumpOutputStream = null;
-//                            thumpOutputStream = FileUtils.createMapImageOrVideoFile(ProfileCommentListActivity.this, "photo").getAbsolutePath();
+//                            thumpOutputStream = FileUtils.createMapImageOrVideoFile(ImageStoryListAdapter.this, "photo").getAbsolutePath();
 //                            FileOutputStream out = null;
 //                            try {
 //                                out = new FileOutputStream(thumpOutputStream);

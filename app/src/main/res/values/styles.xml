@@ -1,12 +1,78 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/red_300</item>
-        <item name="colorPrimaryDark">@color/red_300</item>
-        <item name="colorAccent">@color/red_300</item>
-        <item name="titleTextColor">@android:color/white</item>
+        <item name="colorPrimary">@color/red_500</item>
+        <item name="colorPrimaryDark">@color/red_800</item>
+        <item name="colorAccent">@color/red_800</item>
+        <item name="android:itemTextAppearance">@style/menuItemColor</item>
     </style>
+
+    <style name="menuItemColor">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="AppTheme.PopupOverlay">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/red_500</item>
+        <item name="colorPrimaryDark">@color/red_800</item>
+        <item name="colorAccent">@color/red_800</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/gen_white</item>
+  <!--      <item name="android:textColorSecondary">SUBTITLE_COLOR_GOES_HERE</item>-->
+    </style>
+
+    <style name="AppTheme.Settings" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/red_500</item>
+        <item name="colorPrimaryDark">@color/red_800</item>
+        <item name="colorAccent">@color/red_800</item>
+    </style>
+
+    <style name="AppTheme.WhatsappGreen" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">#006257</item>
+    <item name="colorPrimaryDark">#005048</item>
+    <item name="colorAccent">#005048</item>
+    <!--    <item name="android:textColor">@color/gen_white</item>-->
+</style>
+
+    <style name="AppTheme.SkyBlue" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#48B0ED</item>
+        <item name="colorPrimaryDark">#398CBE</item>
+        <item name="colorAccent">#398CBE</item>
+      <!--  <item name="android:textColor">@color/gen_white</item>-->
+    </style>
+
+    <style name="AppTheme.Home" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/red_500</item>
+        <item name="colorPrimaryDark">@color/red_800</item>
+        <item name="colorAccent">@color/red_800</item>
+        <item name="android:itemTextAppearance">@style/menuItemColor</item>
+    </style>
+
+
+    <style name="AppTheme.WhatsappGreen.Home" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#006257</item>
+        <item name="colorPrimaryDark">#005048</item>
+        <item name="colorAccent">#005048</item>
+        <item name="android:itemTextAppearance">@style/menuItemColor</item>
+    </style>
+
+    <style name="AppTheme.SkyBlue.Home" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#48B0ED</item>
+        <item name="colorPrimaryDark">#398CBE</item>
+        <item name="colorAccent">#398CBE</item>
+        <item name="android:itemTextAppearance">@style/menuItemColor</item>
+    </style>
+
+
 
 </resources>
