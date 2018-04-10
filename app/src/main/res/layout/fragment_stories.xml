@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/light_g"
     android:orientation="vertical"
     tools:context=".home.activities.HomeActivity">
 
@@ -27,9 +26,10 @@
             android:visibility="gone">
 
             <ImageView
+                android:id="@+id/img_err"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_error_outline_red_300_48dp" />
+                android:src="@drawable/ic_error_outline_red_500_48dp" />
 
             <com.ko.wastatus.ui.FontedTextView
                 android:id="@+id/error_txt"
@@ -37,8 +37,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 app:typeface="fabrica"
+                android:padding="5dp"
                 android:text="@string/err_msg_two"
-                android:textColor="@color/red_300"
+                android:textColor="@color/red_500"
                 android:textSize="22sp" />
         </LinearLayout>
 

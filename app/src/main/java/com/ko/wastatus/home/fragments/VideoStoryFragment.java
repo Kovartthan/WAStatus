@@ -12,10 +12,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ko.wastatus.R;
+import com.ko.wastatus.WAApp;
 import com.ko.wastatus.home.OnActionListener;
 import com.ko.wastatus.home.adapters.ImageStoryListAdapter;
 import com.ko.wastatus.home.adapters.VideoStoryListAdapter;
@@ -58,9 +60,11 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
         errorMessage = (LinearLayout) rootView.findViewById(R.id.layout_error);
         errText =  ((TextView) rootView.findViewById(R.id.error_txt));
         errText.setText(getString(R.string.err_msg_two));
+        imgError = rootView.findViewById(R.id.img_err);
     }
 
     private void setupDefault() {
+        changeTheme();
         if (PermissionUtils.checkPermission(getActivity())) {
             checkStorageAndGetFiles();
         }
@@ -158,6 +162,21 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
             fileDetailArrayList.clear();
             checkStorageAndGetFiles();
             videoStoryListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private ImageView imgError;
+
+    public void changeTheme() {
+        if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_BLUE) {
+            imgError.setImageResource(R.drawable.ic_error_outline_blue_48dp);
+            errText.setTextColor(getResources().getColor(R.color.blue_colour));
+        } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_RED) {
+            imgError.setImageResource(R.drawable.ic_error_outline_red_500_48dp);
+            errText.setTextColor(getResources().getColor(R.color.red_500));
+        } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_GREEN) {
+            imgError.setImageResource(R.drawable.ic_error_outline_green_48dp);
+            errText.setTextColor(getResources().getColor(R.color.green_colour));
         }
     }
 }

@@ -36,7 +36,7 @@
             android:title="@string/pref_title_ringtone" />
 
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/key_vibrate"
             android:summary="Turn on vibrate for notifications"
             android:title="Vibrate" />

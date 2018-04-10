@@ -17,8 +17,11 @@ import com.ko.wastatus.R;
 import com.ko.wastatus.WAApp;
 import com.ko.wastatus.home.OnActionListener;
 import com.ko.wastatus.model.FileDetail;
+import com.ko.wastatus.utils.Constants;
 
 import java.util.ArrayList;
+
+import jp.wasabeef.blurry.Blurry;
 
 public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<FileDetail> fileDetailArrayList;
@@ -49,11 +52,12 @@ public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if(WAApp.getApp().getWaPreference().getVideoQualityOption()){
             Log.e("Settings","high");
             bitmap = ThumbnailUtils.createVideoThumbnail(fileDetail.file.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND);
+            ((FileTypeHolder) holder).imgPhoto.setImageBitmap(bitmap);
         }else{
             Log.e("Settings","low");
             bitmap = ThumbnailUtils.createVideoThumbnail(fileDetail.file.getAbsolutePath(), MediaStore.Images.Thumbnails.MICRO_KIND);
+            Blurry.with(context).from(bitmap).into(((FileTypeHolder) holder).imgPhoto);
         }
-        ((FileTypeHolder) holder).imgPhoto.setImageBitmap(bitmap);
         ((FileTypeHolder) holder).imgPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,10 +94,23 @@ public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             imgPlay = (ImageView) itemView.findViewById(R.id.img_play);
             imgPhoto = (ImageView) itemView.findViewById(R.id.img_photo);
             imgPlay.setVisibility(View.VISIBLE);
+            checkAndChangeIcon();
+        }
 
-            if (isSavedStories) {
-                imgUpload.setText("Delete file");
-                imgUpload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_red_300_24dp, 0, 0, 0);
+        private void checkAndChangeIcon() {
+            if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_BLUE) {
+                imgPlay.setImageResource(R.drawable.ic_play_circle_outline_blue_48dp);
+                imgShare.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share_blue_24dp, 0, 0, 0);
+                imgUpload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_file_download_blue_24dp, 0, 0, 0);
+            } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_RED) {
+                imgPlay.setImageResource(R.drawable.ic_play_circle_outline_red_500_48dp);
+                imgShare.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share_red_500_24dp, 0, 0, 0);
+                imgUpload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_file_download_red_500_24dp, 0, 0, 0);
+            } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_GREEN) {
+                imgPlay.setImageResource(R.drawable.ic_play_circle_outline_green_48dp);
+                imgShare.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share_green_24dp, 0, 0, 0);
+                imgUpload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_file_download_green_24dp, 0, 0, 0);
+
             }
         }
     }

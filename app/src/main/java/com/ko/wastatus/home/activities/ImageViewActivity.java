@@ -36,7 +36,7 @@ public class ImageViewActivity extends AppCompatActivity {
         if (getIntent().hasExtra(Constants.PHOTO_PATH)) {
             photoPath = getIntent().getStringExtra(Constants.PHOTO_PATH);
         }
-        Picasso.with(this).load(new File(photoPath)).into(imgPhoto);
+        Picasso.get().load(new File(photoPath)).into(imgPhoto);
     }
 
     private void setupEvents() {

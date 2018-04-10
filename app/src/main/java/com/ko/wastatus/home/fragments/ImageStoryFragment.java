@@ -12,16 +12,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ko.wastatus.R;
+import com.ko.wastatus.WAApp;
 import com.ko.wastatus.home.OnActionListener;
 import com.ko.wastatus.home.adapters.ImageStoryListAdapter;
 import com.ko.wastatus.model.FileDetail;
 import com.ko.wastatus.tasks.SaveFilesToCardAsyncTask;
 import com.ko.wastatus.utils.Constants;
-import com.ko.wastatus.utils.FileUtils;
 import com.ko.wastatus.utils.PermissionUtils;
 
 import java.io.File;
@@ -37,6 +38,7 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
     private LinearLayout errorMessage;
     private boolean isPause;
     private TextView errText;
+
     public ImageStoryFragment() {
         // Required empty public constructor
     }
@@ -55,12 +57,14 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
     private void init(View rootView) {
         fileDetailArrayList = new ArrayList<>();
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_list_file);
+        imgError = rootView.findViewById(R.id.img_err);
         errorMessage = (LinearLayout) rootView.findViewById(R.id.layout_error);
-        errText =  ((TextView) rootView.findViewById(R.id.error_txt));
+        errText = ((TextView) rootView.findViewById(R.id.error_txt));
         errText.setText(getString(R.string.err_msg_two));
     }
 
     private void setupDefault() {
+        changeTheme();
         if (PermissionUtils.checkPermission(getActivity())) {
             checkStorageAndGetFiles();
         }
@@ -76,10 +80,10 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
             fileDetailArrayList = getListFiles(new File(Environment.getExternalStorageDirectory() + WHATSAPP_STATUSES_LOCATION));
         }
 
-        if(fileDetailArrayList.size() == 0){
+        if (fileDetailArrayList.size() == 0) {
             recyclerView.setVisibility(View.INVISIBLE);
             errorMessage.setVisibility(View.VISIBLE);
-        } else{
+        } else {
             recyclerView.setVisibility(View.VISIBLE);
             errorMessage.setVisibility(View.INVISIBLE);
         }
@@ -126,7 +130,7 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
     @Override
     public void onUploadClick(FileDetail fileDetail, boolean isSavedStory, int position) {
         progressDialog = ProgressDialog.show(getActivity(), "", "Saving your status Please wait...", true);
-        new SaveFilesToCardAsyncTask(getActivity(),position,progressDialog).execute(fileDetail);
+        new SaveFilesToCardAsyncTask(getActivity(), position, progressDialog).execute(fileDetail);
     }
 
 
@@ -154,11 +158,26 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
         }
     }
 
-    public void refreshFragment(){
-        if(fileDetailArrayList != null) {
+    public void refreshFragment() {
+        if (fileDetailArrayList != null) {
             fileDetailArrayList.clear();
             checkStorageAndGetFiles();
             imageStoryListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private ImageView imgError;
+
+    public void changeTheme() {
+        if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_BLUE) {
+            imgError.setImageResource(R.drawable.ic_error_outline_blue_48dp);
+            errText.setTextColor(getResources().getColor(R.color.blue_colour));
+        } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_RED) {
+            imgError.setImageResource(R.drawable.ic_error_outline_red_500_48dp);
+            errText.setTextColor(getResources().getColor(R.color.red_500));
+        } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_GREEN) {
+            imgError.setImageResource(R.drawable.ic_error_outline_green_48dp);
+            errText.setTextColor(getResources().getColor(R.color.green_colour));
         }
     }
 }

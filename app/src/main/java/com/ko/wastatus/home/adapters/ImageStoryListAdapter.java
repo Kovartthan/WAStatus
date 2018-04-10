@@ -11,8 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ko.wastatus.R;
-import com.ko.wastatus.home.activities.ImageViewActivity;
+import com.ko.wastatus.WAApp;
 import com.ko.wastatus.home.OnActionListener;
+import com.ko.wastatus.home.activities.ImageViewActivity;
 import com.ko.wastatus.model.FileDetail;
 import com.ko.wastatus.utils.Constants;
 import com.squareup.picasso.Picasso;
@@ -44,7 +45,7 @@ public class ImageStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final FileDetail fileDetail = fileDetailArrayList.get(position);
-        Picasso.with(context).load(fileDetail.file).into(((FileTypeHolder) holder).imgPhoto);
+        Picasso.get().load(fileDetail.file).into(((FileTypeHolder) holder).imgPhoto);
         ((FileTypeHolder) holder).imgPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,11 +83,23 @@ public class ImageStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             imgPlay = (ImageView) itemView.findViewById(R.id.img_play);
             imgPhoto = (ImageView) itemView.findViewById(R.id.img_photo);
             imgPlay.setVisibility(View.INVISIBLE);
-            if (isSavedStories) {
-                imgUpload.setText("Delete file");
-                imgUpload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_delete_red_300_24dp, 0, 0, 0);
+            checkAndChangeIcon();
+        }
+
+        private void checkAndChangeIcon() {
+            if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_BLUE) {
+                imgShare.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share_blue_24dp, 0, 0, 0);
+                imgUpload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_file_download_blue_24dp, 0, 0, 0);
+            } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_RED) {
+                imgShare.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share_red_500_24dp, 0, 0, 0);
+                imgUpload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_file_download_red_500_24dp, 0, 0, 0);
+            } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_GREEN) {
+                imgShare.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share_green_24dp, 0, 0, 0);
+                imgUpload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_file_download_green_24dp, 0, 0, 0);
+
             }
         }
+
     }
 
     public void removeItem(int position) {

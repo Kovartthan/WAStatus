@@ -8,13 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.ko.wastatus.R;
 import com.ko.wastatus.WAApp;
+import com.ko.wastatus.base.BaseActivity;
 import com.ko.wastatus.home.activities.HomeActivity;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
     private static int SPLASH_TIME_OUT = 3000;
 
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        updateTheme();
         setContentView(R.layout.activity_splash_sreen);
         new Handler().postDelayed(new Runnable() {
             public void run() {
