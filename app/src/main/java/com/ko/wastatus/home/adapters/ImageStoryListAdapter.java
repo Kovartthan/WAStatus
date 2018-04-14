@@ -45,14 +45,13 @@ public class ImageStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final FileDetail fileDetail = fileDetailArrayList.get(position);
-        Picasso.get().load(fileDetail.file).into(((FileTypeHolder) holder).imgPhoto);
+        Picasso.get().load(fileDetail.file).resize(300,300).into(((FileTypeHolder) holder).imgPhoto);
         ((FileTypeHolder) holder).imgPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 context.startActivity(new Intent(context, ImageViewActivity.class).putExtra(Constants.PHOTO_PATH, fileDetail.file.getAbsolutePath()));
             }
         });
-
         ((FileTypeHolder) holder).imgShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

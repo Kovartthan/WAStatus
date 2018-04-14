@@ -20,10 +20,6 @@ public class WAApp extends Application {
         mInstance = this;
         waPreference = new WAPreference(this);
         FirebaseAnalytics.getInstance(this);
-//        final Fabric fabric = new Fabric.Builder(this).kits(new Crashlytics())
-//        .debuggable(true) // Enables Crashlytics debugger
-//        .build();
-//        Fabric.with(fabric);
     }
 
     public static WAApp getApp() {

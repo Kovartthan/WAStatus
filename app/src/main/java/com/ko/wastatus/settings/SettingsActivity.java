@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
@@ -72,6 +73,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Mai
     public void onThemeChange() {
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(TAG,"onDestroy called");
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(spChanged);
+    }
 
     SharedPreferences.OnSharedPreferenceChangeListener spChanged = new
             SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -79,8 +86,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Mai
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                                       String key) {
                     if (key.equalsIgnoreCase("key_select_theme")) {
+                        Log.e(TAG,"Recreate called ");
                         HomeActivity.isThemeChanged = true;
-                        reloadActivity();
+//                        reloadActivity();
+                        Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
+                        startActivity(intent);
+                        finish();
+                        overridePendingTransition(0, 0);
                     } else if (key.equalsIgnoreCase(getString(R.string.notifications_new_message))) {
                         if (WAApp.getApp().getWaPreference().getDailyNotification()) {
                             sendSuccessNotification();
@@ -89,8 +101,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Mai
                             PendingIntent pendingIntent = PendingIntent.getBroadcast(SettingsActivity.this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                             Calendar calendar = Calendar.getInstance();
                             calendar.set(Calendar.HOUR_OF_DAY, 8);
-                            calendar.set(Calendar.MINUTE, 00);
-                            calendar.set(Calendar.SECOND, 00);
+                            calendar.set(Calendar.MINUTE, 0);
+                            calendar.set(Calendar.SECOND, 0);
                             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 24 * 60 * 60 * 1000, pendingIntent);
                         } else {
                             Intent myIntent = new Intent(SettingsActivity.this, NotificationReceiver.class);

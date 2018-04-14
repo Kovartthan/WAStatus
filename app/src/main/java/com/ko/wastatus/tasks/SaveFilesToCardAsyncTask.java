@@ -2,7 +2,10 @@ package com.ko.wastatus.tasks;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.widget.Toast;
@@ -10,6 +13,8 @@ import android.widget.Toast;
 import com.ko.wastatus.model.FileDetail;
 import com.ko.wastatus.utils.Constants;
 import com.ko.wastatus.utils.FileUtils;
+
+import java.io.File;
 
 public class SaveFilesToCardAsyncTask extends AsyncTask<FileDetail, Void, String> {
         private String result = "";
@@ -54,6 +59,18 @@ public class SaveFilesToCardAsyncTask extends AsyncTask<FileDetail, Void, String
                     if (result.equalsIgnoreCase("error")) {
                         Toast.makeText(context, "Error in saving file !", Toast.LENGTH_SHORT).show();
                     } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                        {
+                            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                            File f = new File("file://"+ Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+                            Uri contentUri = Uri.fromFile(f);
+                            mediaScanIntent.setData(contentUri);
+                            context.sendBroadcast(mediaScanIntent);
+                        }
+                        else
+                        {
+                            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+                        }
                         Toast.makeText(context, "Status saved successfully", Toast.LENGTH_SHORT).show();
                     }
                 }

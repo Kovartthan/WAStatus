@@ -45,7 +45,10 @@ public class HomeActivity extends BaseActivity {
         if (isThemeChanged) {
             switch (requestCode) {
                 case RC_CHANGE_THEME:
-                    reloadActivity();
+//                    reloadActivity();
+                    overridePendingTransition( 0, 0);
+                    recreate();
+                    overridePendingTransition( 0, 0);
                     isThemeChanged = false;
                     break;
             }
