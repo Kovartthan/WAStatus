@@ -17,6 +17,8 @@ public class WAPreference {
     private static String PREF_THEME = "pref_theme";
     private static String PREF_DAILY_NOTIFICATION = "pref_daily_notification";
     private static String PREF_FIRST_TIME_OPEN = "pref_first_time_open";
+    public static String PREF_NOTIFICATION_VALUE_CHANGED = "pref_notification_value_changed";
+    public static String PREF_IMAGE_PREVIEW = "pref_image_preview";
     public WAPreference(Context context) {
         mContext = context;
         mPrefs = mContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -65,7 +67,7 @@ public class WAPreference {
     }
 
     public boolean getDailyNotification(){
-        return mPrefs.getBoolean(mContext.getString(R.string.notifications_new_message), false);
+        return mPrefs.getBoolean(mContext.getString(R.string.notifications_new_message), true);
     }
 
     public void setVibrateNotification(boolean value){
@@ -85,6 +87,16 @@ public class WAPreference {
     public boolean getAppFirstTimeOpen(){
         return mPrefs.getBoolean(PREF_FIRST_TIME_OPEN, false);
     }
+
+    public void setDbValue(boolean value){
+        mEditor.putBoolean(PREF_NOTIFICATION_VALUE_CHANGED, value);
+        mEditor.commit();
+    }
+
+    public boolean getDbValue(){
+        return mPrefs.getBoolean(PREF_NOTIFICATION_VALUE_CHANGED, false);
+    }
+
 
 
     public void clearPrefernces() {

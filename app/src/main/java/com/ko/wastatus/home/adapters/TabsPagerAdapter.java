@@ -11,7 +11,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
-
+    private String tabTitles[] = new String[]{"Images", "Videos", "Saved"};
+    private boolean isChangeTheTab;
     public TabsPagerAdapter(FragmentManager manager) {
         super(manager);
     }
@@ -34,5 +35,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return mFragmentTitleList.get(position);
+    }
+
+    public void setChangeTheTab(boolean isChangeTheTab){
+        this.isChangeTheTab = isChangeTheTab;
     }
 }

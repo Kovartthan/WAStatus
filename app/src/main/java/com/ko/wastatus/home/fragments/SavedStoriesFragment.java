@@ -1,6 +1,7 @@
 package com.ko.wastatus.home.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -66,9 +67,7 @@ public class SavedStoriesFragment extends Fragment implements OnActionListener {
 
     private void setupDefault() {
         changeTheme();
-        if (PermissionUtils.checkPermission(getActivity())) {
             checkStorageAndGetFiles();
-        }
         homeListAdapter = new HomeListAdapter(getActivity(), fileDetailArrayList, true);
         homeListAdapter.setOnActionListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -100,6 +99,11 @@ public class SavedStoriesFragment extends Fragment implements OnActionListener {
 
     }
 
+    @Override
+    public void onShowCaseView(Context context, RecyclerView.ViewHolder viewHolder, int position) {
+
+    }
+
     private ArrayList<FileDetail> getListFiles(File parentDir) {
         File[] files;
         files = parentDir.listFiles();
@@ -109,13 +113,13 @@ public class SavedStoriesFragment extends Fragment implements OnActionListener {
             for (File file : files) {
                 if (!fileDetailArrayList.contains(file)) {
                     if (file.getName().endsWith(".gif")) {
-                        fileDetailArrayList.add(new FileDetail(1, file));
+                        fileDetailArrayList.add(new FileDetail(1, file,null));
                     }
                     if (file.getName().endsWith(".mp4")) {
-                        fileDetailArrayList.add(new FileDetail(2, file));
+                        fileDetailArrayList.add(new FileDetail(2, file,null));
                     }
                     if (file.getName().endsWith(".jpg")) {
-                        fileDetailArrayList.add(new FileDetail(3, file));
+                        fileDetailArrayList.add(new FileDetail(3, file,null));
                     }
                 }
             }

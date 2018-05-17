@@ -4,8 +4,8 @@ package com.ko.wastatus.home.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
-import android.provider.MediaStore;
+import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +13,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.ko.wastatus.R;
 import com.ko.wastatus.WAApp;
-import com.ko.wastatus.home.activities.ImageViewActivity;
 import com.ko.wastatus.home.OnActionListener;
+import com.ko.wastatus.home.activities.ImageViewActivity;
 import com.ko.wastatus.model.FileDetail;
 import com.ko.wastatus.utils.Constants;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,6 +35,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private OnActionListener onActionListener;
     private boolean isSavedStories;
+    private RequestOptions options;
 
     public void setOnActionListener(OnActionListener onActionListener) {
         this.onActionListener = onActionListener;
@@ -37,6 +45,8 @@ public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.context = context;
         this.fileDetailArrayList = fileDetailArrayList;
         this.isSavedStories = isSavedStories;
+        long interval = 3000 * 1000;
+        options = new RequestOptions().frame(interval);
     }
 
     @Override
@@ -46,19 +56,71 @@ public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final FileDetail fileDetail = fileDetailArrayList.get(position);
-
-
         if (fileDetail.file.getName().endsWith(".mp4")) {
-            ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
-            Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(fileDetail.file.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND);
-            ((FileTypeHolder) holder).imgPhoto.setImageBitmap(bitmap);
+            if (WAApp.getApp().getWaPreference().getVideoQualityOption()) {
+                Glide.with(context).asBitmap().load(Uri.fromFile(fileDetail.file)).listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        ((FileTypeHolder) holder).txtLoading.setVisibility(View.GONE);
+                        ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        ((FileTypeHolder) holder).txtLoading.setVisibility(View.INVISIBLE);
+                        ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                }).apply(options).into(((FileTypeHolder) holder).imgPhoto);
+            } else {
+                Glide.with(context).asBitmap().load(Uri.fromFile(fileDetail.file)).listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        ((FileTypeHolder) holder).txtLoading.setVisibility(View.GONE);
+                        ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        ((FileTypeHolder) holder).txtLoading.setVisibility(View.INVISIBLE);
+                        ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                }).apply(options.override(400, 400)).into(((FileTypeHolder) holder).imgPhoto);
+            }
             ((FileTypeHolder) holder).imgPhoto.setEnabled(false);
         } else {
             ((FileTypeHolder) holder).imgPhoto.setEnabled(true);
             ((FileTypeHolder) holder).imgPlay.setVisibility(View.INVISIBLE);
-            Picasso.get().load(fileDetail.file).into(((FileTypeHolder) holder).imgPhoto);
+            if (WAApp.getApp().getWaPreference().getVideoQualityOption()) {
+                Picasso.get().load(fileDetail.file).into(((FileTypeHolder) holder).imgPhoto, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        ((FileTypeHolder) holder).txtLoading.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        ((FileTypeHolder) holder).txtLoading.setText(R.string.lding_err);
+                    }
+                });
+            } else {
+                Picasso.get().load(fileDetail.file).resize(400, 400).into(((FileTypeHolder) holder).imgPhoto, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        ((FileTypeHolder) holder).txtLoading.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        ((FileTypeHolder) holder).txtLoading.setText(R.string.lding_err);
+                    }
+                });
+            }
             ((FileTypeHolder) holder).imgPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -93,7 +155,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public class FileTypeHolder extends RecyclerView.ViewHolder {
         public ImageView imgPlay, imgPhoto;
-        public TextView imgShare, imgUpload;
+        public TextView imgShare, imgUpload, txtLoading;
 
         public FileTypeHolder(View itemView) {
             super(itemView);
@@ -101,6 +163,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgUpload = (TextView) itemView.findViewById(R.id.img_upload);
             imgPlay = (ImageView) itemView.findViewById(R.id.img_play);
             imgPhoto = (ImageView) itemView.findViewById(R.id.img_photo);
+            txtLoading = itemView.findViewById(R.id.txt_loading);
             checkAndChangeIcon();
         }
 

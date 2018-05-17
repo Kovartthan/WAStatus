@@ -1,6 +1,7 @@
 package com.ko.wastatus.home.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ko.wastatus.OnShowCaseListener;
 import com.ko.wastatus.R;
 import com.ko.wastatus.WAApp;
 import com.ko.wastatus.home.OnActionListener;
@@ -23,7 +26,6 @@ import com.ko.wastatus.home.adapters.ImageStoryListAdapter;
 import com.ko.wastatus.model.FileDetail;
 import com.ko.wastatus.tasks.SaveFilesToCardAsyncTask;
 import com.ko.wastatus.utils.Constants;
-import com.ko.wastatus.utils.PermissionUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,16 +33,21 @@ import java.util.ArrayList;
 import static com.ko.wastatus.utils.Constants.WHATSAPP_STATUSES_LOCATION;
 
 public class ImageStoryFragment extends Fragment implements OnActionListener {
-    private ArrayList<FileDetail> fileDetailArrayList;
+    public ArrayList<FileDetail> fileDetailArrayList;
     private RecyclerView recyclerView;
     private ImageStoryListAdapter imageStoryListAdapter;
     private ProgressDialog progressDialog;
     private LinearLayout errorMessage;
     private boolean isPause;
     private TextView errText;
+    private OnShowCaseListener onShowCaseListener;
 
     public ImageStoryFragment() {
         // Required empty public constructor
+    }
+
+    public void setOnShowCaseListener(OnShowCaseListener onShowCaseListener) {
+        this.onShowCaseListener = onShowCaseListener;
     }
 
     @Override
@@ -65,9 +72,7 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
 
     private void setupDefault() {
         changeTheme();
-        if (PermissionUtils.checkPermission(getActivity())) {
-            checkStorageAndGetFiles();
-        }
+        checkStorageAndGetFiles();
         imageStoryListAdapter = new ImageStoryListAdapter(getActivity(), fileDetailArrayList, false);
         imageStoryListAdapter.setOnActionListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -75,9 +80,12 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
     }
 
     public void checkStorageAndGetFiles() {
+
         File directory = new File(Environment.getExternalStorageDirectory() + WHATSAPP_STATUSES_LOCATION);
+
         if (directory.exists()) {
             fileDetailArrayList = getListFiles(new File(Environment.getExternalStorageDirectory() + WHATSAPP_STATUSES_LOCATION));
+            insertFilesToDatabase(new File(Environment.getExternalStorageDirectory() + WHATSAPP_STATUSES_LOCATION));
         }
 
         if (fileDetailArrayList.size() == 0) {
@@ -99,19 +107,64 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
         if (files != null) {
             recyclerView.setVisibility(View.VISIBLE);
             errorMessage.setVisibility(View.INVISIBLE);
-            for (File file : files) {
-                if (!fileDetailArrayList.contains(file)) {
-                    if (file.getName().endsWith(".gif")) {
-                        fileDetailArrayList.add(new FileDetail(1, file));
-                    }
-                    if (file.getName().endsWith(".jpg")) {
-                        fileDetailArrayList.add(new FileDetail(3, file));
-                    }
+            for (int i = 0; i < files.length; i++) {
+                File file = files[i];
+                addFilesToArrayList(file);
+                if (files.length > 10) {
+                    if (i == 3)
+                        fileDetailArrayList.add(new FileDetail(1, null, null, FileDetail.TYPE_SUGGESTION));
+                    else if (i == 7)
+                        fileDetailArrayList.add(new FileDetail(2, null, null, FileDetail.TYPE_SUGGESTION));
+//                Collections.shuffle(fileDetailArrayList);
                 }
             }
+
         }
         return fileDetailArrayList;
     }
+
+    private void addFilesToArrayList(File file) {
+        if (!fileDetailArrayList.contains(file)) {
+            if (file.getName().endsWith(".gif")) {
+                fileDetailArrayList.add(new FileDetail(1, file, null, FileDetail.TYPE_ITEM));
+            }
+            if (file.getName().endsWith(".jpg")) {
+                fileDetailArrayList.add(new FileDetail(3, file, null, FileDetail.TYPE_ITEM));
+            }
+        }
+    }
+
+    private void insertFilesToDatabase(File file) {
+        File[] files;
+        files = file.listFiles();
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+              if(WAApp.getApp().getWaPreference().getDbValue()) {
+                  if (!WAApp.getApp().getDatabaseHandler().checkIsInDBorNot(files[i].getName())) {
+                      if (files[i].getName().endsWith(".gif")) {
+                          WAApp.getApp().getDatabaseHandler().addFile(new FileDetail(1, files[i], null, FileDetail.TYPE_ITEM));
+                      } else if (files[i].getName().endsWith(".jpg")) {
+                          WAApp.getApp().getDatabaseHandler().addFile(new FileDetail(3, files[i], null, FileDetail.TYPE_ITEM));
+                      } else if (files[i].getName().endsWith(".mp4")) {
+                          WAApp.getApp().getDatabaseHandler().addFile(new FileDetail(2, files[i], null, FileDetail.TYPE_ITEM));
+                      }
+                  }
+              }else{
+                  if (files[i].getName().endsWith(".gif")) {
+                      WAApp.getApp().getDatabaseHandler().addFile(new FileDetail(1, files[i], null, FileDetail.TYPE_ITEM));
+                  } else if (files[i].getName().endsWith(".jpg")) {
+                      WAApp.getApp().getDatabaseHandler().addFile(new FileDetail(3, files[i], null, FileDetail.TYPE_ITEM));
+                  } else if (files[i].getName().endsWith(".mp4")) {
+                      WAApp.getApp().getDatabaseHandler().addFile(new FileDetail(2, files[i], null, FileDetail.TYPE_ITEM));
+                  }
+              }
+            }
+            WAApp.getApp().getWaPreference().setDbValue(true);
+            Log.e("Tag", "getFileCount " + WAApp.getApp().getDatabaseHandler().getFileCount());
+        }
+    }
+
+
 
     @Override
     public void onShareClick(FileDetail fileDetail) {
@@ -158,6 +211,7 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
         }
     }
 
+
     public void refreshFragment() {
         if (fileDetailArrayList != null) {
             fileDetailArrayList.clear();
@@ -178,6 +232,13 @@ public class ImageStoryFragment extends Fragment implements OnActionListener {
         } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_GREEN) {
             imgError.setImageResource(R.drawable.ic_error_outline_green_48dp);
             errText.setTextColor(getResources().getColor(R.color.green_colour));
+        }
+    }
+
+    @Override
+    public void onShowCaseView(Context context, RecyclerView.ViewHolder viewHolder, int position) {
+        if (onShowCaseListener != null) {
+            onShowCaseListener.performShowCaseView(context, viewHolder, position);
         }
     }
 }

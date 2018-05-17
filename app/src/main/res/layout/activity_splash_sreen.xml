@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/red_500"
+    android:id="@+id/layout_splash"
     android:layout_height="match_parent">
-
-</LinearLayout>
+    <ImageView
+        android:id="@+id/img_wa"
+        android:src="@drawable/whatsapp"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/txt_title"
+        android:textColor="@color/gen_white"
+        android:layout_below="@id/img_wa"
+        android:layout_marginTop="10dp"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Whatsapp Status Saver"
+        android:fontFamily="casual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

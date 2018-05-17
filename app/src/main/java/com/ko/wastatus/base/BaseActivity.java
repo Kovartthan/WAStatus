@@ -1,5 +1,7 @@
 package com.ko.wastatus.base;
 
+
+import android.app.ActivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,20 @@ public class BaseActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updateTheme();
+        setImageOptimisationByRam();
+    }
+
+    private void setImageOptimisationByRam() {
+        if(!WAApp.getApp().getWaPreference().getAppFirstTimeOpen()) {
+            ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            activityManager.getMemoryInfo(mi);
+            if (mi.totalMem > 1677721600) {
+                WAApp.getApp().getWaPreference().setVideoQualityOption(true);
+            } else {
+                WAApp.getApp().getWaPreference().setVideoQualityOption(false);
+            }
+        }
     }
 
     public void updateTheme() {

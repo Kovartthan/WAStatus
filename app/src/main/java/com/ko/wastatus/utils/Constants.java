@@ -15,4 +15,6 @@ public interface Constants {
      int THEME_BLUE = 2;
      int THEME_RED = 0;
      int THEME_GREEN = 1;
+    String CLEAR_NOTIFICATION = "clear_notification";
+    String OPEN_SETTINGS = "open_settings";
 }

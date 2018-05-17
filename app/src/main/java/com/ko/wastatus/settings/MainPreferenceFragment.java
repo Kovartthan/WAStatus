@@ -9,15 +9,20 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.preference.SwitchPreference;
 import android.text.TextUtils;
+import android.widget.ListAdapter;
 
 import com.ko.wastatus.R;
 import com.ko.wastatus.WAApp;
+import com.ko.wastatus.utils.Constants;
 
 public class MainPreferenceFragment extends PreferenceFragment {
     public OnThemeChangedListener onThemeChangedListener;
+    private boolean isOpenedActivity;
+    private boolean isSetVideoHighQuality;
 
     public interface OnThemeChangedListener {
         void onThemeChange();
@@ -36,6 +41,15 @@ public class MainPreferenceFragment extends PreferenceFragment {
         bindListPreferenceToValue(findPreference(getString(R.string.key_select_theme)));
         bindDailyNotification(findPreference(getString(R.string.notifications_new_message)));
         bindVibrateNotification(findPreference(getString(R.string.key_vibrate)));
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            boolean isOpenThemes = bundle.getBoolean(Constants.OPEN_SETTINGS);
+            if (isOpenThemes) {
+                openSelectTheme();
+            }
+        }
+
+
     }
 
     private void bindDailyNotification(Preference preference) {
@@ -109,12 +123,23 @@ public class MainPreferenceFragment extends PreferenceFragment {
                     }
                 }
             } else if (preference instanceof CheckBoxPreference) {
-                boolean isChecked = Boolean.valueOf(newValue.toString());
-                WAApp.getApp().getWaPreference().setVideoQualityOption(isChecked);
+                if (!isSetVideoHighQuality) {
+                    isSetVideoHighQuality = true;
+                    changeVideoQualitySelection();
+                } else {
+                    boolean isChecked = Boolean.valueOf(newValue.toString());
+                    WAApp.getApp().getWaPreference().setVideoQualityOption(isChecked);
+                }
             } else if (preference instanceof SwitchPreference) {
                 if (preference.getKey().equalsIgnoreCase("notifications_new_message")) {
-                    boolean isChecked = Boolean.valueOf(newValue.toString());
-                    WAApp.getApp().getWaPreference().setValueForDailyNotification(isChecked);
+                    boolean isChecked;
+                    if (!isOpenedActivity) {
+                        isOpenedActivity = true;
+                        changeNotificationSelection();
+                    } else {
+                        isChecked = Boolean.valueOf(newValue.toString());
+                        WAApp.getApp().getWaPreference().setValueForDailyNotification(isChecked);
+                    }
                 } else {
                     boolean isChecked = Boolean.valueOf(newValue.toString());
                     WAApp.getApp().getWaPreference().setVibrateNotification(isChecked);
@@ -125,6 +150,48 @@ public class MainPreferenceFragment extends PreferenceFragment {
             return true;
         }
     };
+
+    public void openSelectTheme() {
+        PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference("key_settings");
+        ListPreference subPreferenceScreen = (ListPreference) findPreference("key_select_theme");
+        final ListAdapter listAdapter = preferenceScreen.getRootAdapter();
+        final int itemsCount = listAdapter.getCount();
+        int itemNumber;
+        for (itemNumber = 0; itemNumber < itemsCount; ++itemNumber) {
+            if (listAdapter.getItem(itemNumber).equals(subPreferenceScreen)) {
+                preferenceScreen.onItemClick(null, null, itemNumber, 0);
+                break;
+            }
+        }
+    }
+
+    private void changeNotificationSelection() {
+        PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference("key_settings");
+        SwitchPreference subPreferenceScreen = (SwitchPreference) findPreference("notifications_new_message");
+        final ListAdapter listAdapter = preferenceScreen.getRootAdapter();
+        final int itemsCount = listAdapter.getCount();
+        int itemNumber;
+        for (itemNumber = 0; itemNumber < itemsCount; ++itemNumber) {
+            if (listAdapter.getItem(itemNumber).equals(subPreferenceScreen)) {
+                subPreferenceScreen.setChecked(WAApp.getApp().getWaPreference().getDailyNotification());
+                break;
+            }
+        }
+    }
+
+    private void changeVideoQualitySelection() {
+        PreferenceScreen preferenceScreen = (PreferenceScreen) findPreference("key_settings");
+        CheckBoxPreference subPreferenceScreen = (CheckBoxPreference) findPreference("key_video_thumbnail_quality");
+        final ListAdapter listAdapter = preferenceScreen.getRootAdapter();
+        final int itemsCount = listAdapter.getCount();
+        int itemNumber;
+        for (itemNumber = 0; itemNumber < itemsCount; ++itemNumber) {
+            if (listAdapter.getItem(itemNumber).equals(subPreferenceScreen)) {
+                subPreferenceScreen.setChecked(WAApp.getApp().getWaPreference().getVideoQualityOption());
+                break;
+            }
+        }
+    }
 
 
 }

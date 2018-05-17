@@ -1,7 +1,7 @@
 package com.ko.wastatus.home.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,7 +29,7 @@ public class ImageViewActivity extends AppCompatActivity {
     private void init() {
         imgClose = (ImageView) findViewById(R.id.img_close);
         imgPhoto = (ImageView) findViewById(R.id.img_full_view);
-        Toast.makeText(this,"Pinch to zoom",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Pinch to zoom", Toast.LENGTH_SHORT).show();
     }
 
     private void setupDefaults() {

@@ -2,10 +2,17 @@ package com.ko.wastatus.intro;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +28,9 @@ import android.widget.TextView;
 
 import com.ko.wastatus.R;
 import com.ko.wastatus.home.activities.HomeActivity;
+import com.ko.wastatus.utils.AlertUtils;
+import com.ko.wastatus.utils.Constants;
+import com.ko.wastatus.utils.PermissionUtils;
 
 public class IntroActivity extends AppCompatActivity {
     private ViewPager viewPager;
@@ -29,6 +39,7 @@ public class IntroActivity extends AppCompatActivity {
     private TextView[] dots;
     private int[] layouts;
     private Button btnSkip, btnNext;
+    private boolean isPause;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,7 @@ public class IntroActivity extends AppCompatActivity {
 
     private void setupDefault() {
         changeStatusBarColor();
+
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
         btnSkip.setVisibility(View.INVISIBLE);
@@ -82,11 +94,51 @@ public class IntroActivity extends AppCompatActivity {
                     viewPager.setCurrentItem(current);
                 } else {
 //                    launchHomeScreen();
-                    startActivity(new Intent(IntroActivity.this, HomeActivity.class));
-                    finish();
+                    boolean result = PermissionUtils.checkExternalStoragePermission(IntroActivity.this);
+                    if (!result) {
+                        PermissionUtils.checkExternalStoragePermission(IntroActivity.this);
+                    } else {
+                        startActivity(new Intent(IntroActivity.this, HomeActivity.class));
+                        finish();
+                    }
                 }
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Constants.RC_STORAGE_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(new Intent(IntroActivity.this, HomeActivity.class));
+                    finish();
+                } else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    boolean showRationale = shouldShowRequestPermissionRationale(permissions[0]);
+                    if (!showRationale) {
+                        AlertUtils.showCommonAlertDialogWithPositive(this,"Permission required" ,"You have denied the permission, by enabling the permission you can see your whatsapp stories. Please enable it in the Settings page","Ok" ,new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        AlertUtils.showCommonAlertDialogWithPositive(this, "Permission required", "Storage Permission is necessary, Please give allow to access", "Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                PermissionUtils.checkExternalStoragePermission(IntroActivity.this);
+                            }
+                        });
+                    }
+                }
+                break;
+        }
     }
 
     private void addBottomDots(int currentPage) {

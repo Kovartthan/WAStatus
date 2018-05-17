@@ -15,7 +15,7 @@
 
 
     <RelativeLayout
-        android:background="@color/red_400"
+        android:background="@color/red_500"
         android:id="@+id/layout_below"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"

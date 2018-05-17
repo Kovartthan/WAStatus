@@ -1,8 +1,10 @@
 package com.ko.wastatus.home.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -19,12 +21,10 @@ import android.widget.TextView;
 import com.ko.wastatus.R;
 import com.ko.wastatus.WAApp;
 import com.ko.wastatus.home.OnActionListener;
-import com.ko.wastatus.home.adapters.ImageStoryListAdapter;
 import com.ko.wastatus.home.adapters.VideoStoryListAdapter;
 import com.ko.wastatus.model.FileDetail;
 import com.ko.wastatus.tasks.SaveFilesToCardAsyncTask;
 import com.ko.wastatus.utils.Constants;
-import com.ko.wastatus.utils.PermissionUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
     private LinearLayout errorMessage;
     private boolean isPause;
     private TextView errText;
+
     public VideoStoryFragment() {
         // Required empty public constructor
     }
@@ -54,22 +55,25 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
         return rootView;
     }
 
+    @Override
+    public void onShowCaseView(Context context, RecyclerView.ViewHolder viewHolder, int position) {
+
+    }
+
     private void init(View rootView) {
         fileDetailArrayList = new ArrayList<>();
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_list_file);
         errorMessage = (LinearLayout) rootView.findViewById(R.id.layout_error);
-        errText =  ((TextView) rootView.findViewById(R.id.error_txt));
+        errText = ((TextView) rootView.findViewById(R.id.error_txt));
         errText.setText(getString(R.string.err_msg_two));
         imgError = rootView.findViewById(R.id.img_err);
     }
 
     private void setupDefault() {
         changeTheme();
-        if (PermissionUtils.checkPermission(getActivity())) {
-            checkStorageAndGetFiles();
-        }
+        checkStorageAndGetFiles();
         videoStoryListAdapter = new VideoStoryListAdapter(getActivity(), fileDetailArrayList, false);
-        videoStoryListAdapter.setOnActionListener(this);
+        videoStoryListAdapter.setOnActionListener(VideoStoryFragment.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(videoStoryListAdapter);
     }
@@ -77,13 +81,12 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
     public void checkStorageAndGetFiles() {
         File directory = new File(Environment.getExternalStorageDirectory() + WHATSAPP_STATUSES_LOCATION);
         if (directory.exists()) {
-            fileDetailArrayList = getListFiles(new File(Environment.getExternalStorageDirectory() + WHATSAPP_STATUSES_LOCATION));
+            getListFiles(directory);
         }
-
-        if(fileDetailArrayList.size() == 0){
+        if (fileDetailArrayList.size() == 0) {
             recyclerView.setVisibility(View.INVISIBLE);
             errorMessage.setVisibility(View.VISIBLE);
-        } else{
+        } else {
             recyclerView.setVisibility(View.VISIBLE);
             errorMessage.setVisibility(View.INVISIBLE);
         }
@@ -93,21 +96,16 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
 
     }
 
-    private ArrayList<FileDetail> getListFiles(File parentDir) {
+    private void getListFiles(File parentDir) {
         File[] files;
         files = parentDir.listFiles();
-        if (files != null) {
-            recyclerView.setVisibility(View.VISIBLE);
-            errorMessage.setVisibility(View.INVISIBLE);
-            for (File file : files) {
-                if (!fileDetailArrayList.contains(file)) {
-                    if (file.getName().endsWith(".mp4")) {
-                        fileDetailArrayList.add(new FileDetail(2, file));
-                    }
+        for (File file : files) {
+            if (!fileDetailArrayList.contains(file)) {
+                if (file.getName().endsWith(".mp4")) {
+                    fileDetailArrayList.add(new FileDetail(2, file, null));
                 }
             }
         }
-        return fileDetailArrayList;
     }
 
     @Override
@@ -129,7 +127,7 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
     @Override
     public void onUploadClick(FileDetail fileDetail, boolean isSavedStory, int position) {
         progressDialog = ProgressDialog.show(getActivity(), "", "Saving your status Please wait...", true);
-        new SaveFilesToCardAsyncTask(getActivity(),position,progressDialog).execute(fileDetail);
+        new SaveFilesToCardAsyncTask(getActivity(), position, progressDialog).execute(fileDetail);
     }
 
 
@@ -157,8 +155,8 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
         }
     }
 
-    public void refreshFragment(){
-        if(fileDetailArrayList != null) {
+    public void refreshFragment() {
+        if (fileDetailArrayList != null) {
             fileDetailArrayList.clear();
             checkStorageAndGetFiles();
             videoStoryListAdapter.notifyDataSetChanged();
@@ -177,6 +175,41 @@ public class VideoStoryFragment extends Fragment implements OnActionListener {
         } else if (WAApp.getApp().getWaPreference().getTheme() == Constants.THEME_GREEN) {
             imgError.setImageResource(R.drawable.ic_error_outline_green_48dp);
             errText.setTextColor(getResources().getColor(R.color.green_colour));
+        }
+    }
+
+    private class SetDataForVideo extends AsyncTask<Void, Void, Void> {
+        File[] files;
+        Context context;
+        ProgressDialog progressDialog;
+
+        public SetDataForVideo(File[] files, Context context) {
+            this.files = files;
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage("Loading your status");
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+            videoStoryListAdapter = new VideoStoryListAdapter(getActivity(), fileDetailArrayList, false);
+            videoStoryListAdapter.setOnActionListener(VideoStoryFragment.this);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(videoStoryListAdapter);
         }
     }
 }

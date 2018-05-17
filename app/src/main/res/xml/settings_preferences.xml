@@ -1,13 +1,14 @@
 <PreferenceScreen
+    android:key="key_settings"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="General">
+    <PreferenceCategory android:key="key_cat"  android:title="General">
 
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/key_video_thumbnail_quality"
             android:summary="By turning on this options may affect app performance"
-            android:title="Video thumbnail high quality" />
+            android:title="Enable high quality image preview" />
 
         <ListPreference
             android:defaultValue="0"

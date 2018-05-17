@@ -3,16 +3,23 @@ package com.ko.wastatus.home.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.ko.wastatus.R;
 import com.ko.wastatus.WAApp;
 import com.ko.wastatus.home.OnActionListener;
@@ -21,7 +28,6 @@ import com.ko.wastatus.utils.Constants;
 
 import java.util.ArrayList;
 
-import jp.wasabeef.blurry.Blurry;
 
 public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<FileDetail> fileDetailArrayList;
@@ -29,6 +35,8 @@ public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private OnActionListener onActionListener;
     private boolean isSavedStories;
     private CheckBoxPreference checkBoxPreference;
+    private RequestOptions options;
+
     public void setOnActionListener(OnActionListener onActionListener) {
         this.onActionListener = onActionListener;
     }
@@ -37,6 +45,8 @@ public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.context = context;
         this.fileDetailArrayList = fileDetailArrayList;
         this.isSavedStories = isSavedStories;
+        long interval = 3000 * 1000;
+        options = new RequestOptions().frame(interval);
     }
 
     @Override
@@ -46,17 +56,39 @@ public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final FileDetail fileDetail = fileDetailArrayList.get(position);
-        Bitmap bitmap = null;
-        if(WAApp.getApp().getWaPreference().getVideoQualityOption()){
-            Log.e("Settings","high");
-            bitmap = ThumbnailUtils.createVideoThumbnail(fileDetail.file.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND);
-            ((FileTypeHolder) holder).imgPhoto.setImageBitmap(bitmap);
-        }else{
-            Log.e("Settings","low");
-            bitmap = ThumbnailUtils.createVideoThumbnail(fileDetail.file.getAbsolutePath(), MediaStore.Images.Thumbnails.MICRO_KIND);
-            Blurry.with(context).from(bitmap).into(((FileTypeHolder) holder).imgPhoto);
+        if (WAApp.getApp().getWaPreference().getVideoQualityOption()) {
+            Glide.with(context).asBitmap().load(Uri.fromFile(fileDetail.file)).listener(new RequestListener<Bitmap>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                    ((FileTypeHolder) holder).txtLoading.setVisibility(View.GONE);
+                    ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
+                    return false;
+                }
+                @Override
+                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                    ((FileTypeHolder) holder).txtLoading.setVisibility(View.INVISIBLE);
+                    ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
+                    return false;
+                }
+            }).apply(options).into(((FileTypeHolder) holder).imgPhoto);
+        } else {
+            Glide.with(context).asBitmap().load(Uri.fromFile(fileDetail.file)).listener(new RequestListener<Bitmap>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                    ((FileTypeHolder) holder).txtLoading.setVisibility(View.GONE);
+                    ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                    ((FileTypeHolder) holder).txtLoading.setVisibility(View.INVISIBLE);
+                    ((FileTypeHolder) holder).imgPlay.setVisibility(View.VISIBLE);
+                    return false;
+                }
+            }).apply(options.override(400,400)).into(((FileTypeHolder) holder).imgPhoto);
         }
         ((FileTypeHolder) holder).imgPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +117,7 @@ public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public class FileTypeHolder extends RecyclerView.ViewHolder {
         public ImageView imgPlay, imgPhoto;
-        public TextView imgShare, imgUpload;
+        public TextView imgShare, imgUpload, txtLoading;
 
         public FileTypeHolder(View itemView) {
             super(itemView);
@@ -93,7 +125,7 @@ public class VideoStoryListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             imgUpload = (TextView) itemView.findViewById(R.id.img_upload);
             imgPlay = (ImageView) itemView.findViewById(R.id.img_play);
             imgPhoto = (ImageView) itemView.findViewById(R.id.img_photo);
-            imgPlay.setVisibility(View.VISIBLE);
+            txtLoading = itemView.findViewById(R.id.txt_loading);
             checkAndChangeIcon();
         }
 

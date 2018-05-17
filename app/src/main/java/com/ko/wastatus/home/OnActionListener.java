@@ -1,5 +1,8 @@
 package com.ko.wastatus.home;
 
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+
 import com.ko.wastatus.model.FileDetail;
 
 /**
@@ -10,4 +13,5 @@ public  interface OnActionListener {
     void onShareClick(FileDetail fileDetail);
     void onPlayClick(FileDetail  fileDetail);
     void onUploadClick(FileDetail fileDetail,boolean isSavedStory,int positon);
+    void onShowCaseView(Context context, RecyclerView.ViewHolder viewHolder,int position);
 }

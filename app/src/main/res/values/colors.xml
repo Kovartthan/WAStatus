@@ -52,4 +52,7 @@
     <color name="red_A700">#D50000</color>
     <color name="blue_colour">#48B0ED</color>
     <color name="green_colour">#006257</color>
+    <color name="loading_color">#f4efef</color>
+    <color name="about_text_color">#878585</color>
+    <color name="transparent_color">#98d2d2d2</color>
 </resources>

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ko.wastatus">
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -23,36 +21,50 @@
 
         <activity
             android:name=".intro.IntroActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".home.activities.HomeActivity" />
-        <activity android:name=".intro.SplashActivity">
+        <activity
+            android:name=".intro.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.activities.ImageViewActivity" />
+        <activity
+            android:name=".home.activities.ImageViewActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".settings.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" />
 
-        <receiver
-            android:name=".notification.NotificationReceiver"
-            android:enabled="true"
-            android:exported="false" />
+
 
         <service
-            android:name=".notification.NotificationJobIntentService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <receiver android:name=".notification.DeviceBootReceiver">
+            android:name=".notification.NotificationJobSchedulerService"
+            android:label="NotificationJobSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".notification.NetworkChangeReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".about.AboutActivity" android:theme="@style/AppTheme.Settings"/>
+        <activity
+            android:name=".about.AboutActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
