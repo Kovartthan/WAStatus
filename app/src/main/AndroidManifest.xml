@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ko.wastatus">
+    package="com.ko.statussaver">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
+    <uses-permission android:name="android.permission.GET_TASKS"/>
     <application
-        android:name=".WAApp"
+        android:name="com.ko.statussaver.WAApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:exported="true"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
             android:value="false" />
 
         <activity
-            android:name=".intro.IntroActivity"
+            android:name="com.ko.statussaver.intro.IntroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".home.activities.HomeActivity" />
+        <activity android:name="com.ko.statussaver.home.activities.HomeActivity" />
         <activity
-            android:name=".intro.SplashActivity"
+            android:name="com.ko.statussaver.intro.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -35,17 +37,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.activities.ImageViewActivity"
+            android:name="com.ko.statussaver.home.activities.ImageViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="com.ko.statussaver.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait" />
 
 
 
         <service
-            android:name=".notification.NotificationJobSchedulerService"
+            android:name="com.ko.statussaver.notification.NotificationJobSchedulerService"
             android:label="NotificationJobSchedulerService"
             android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
@@ -54,7 +56,7 @@
         </service>
 
         <receiver
-            android:name=".notification.NetworkChangeReceiver"
+            android:name="com.ko.statussaver.notification.NetworkChangeReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -63,8 +65,18 @@
         </receiver>
 
         <activity
-            android:name=".about.AboutActivity"
+            android:name="com.ko.statussaver.about.AboutActivity"
             android:screenOrientation="portrait" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.ko.statussaver.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/path" />
+        </provider>
     </application>
 
 </manifest>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Whatsapp Status Saver</string>
+    <string name="app_name">Status Saver</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="start">Get Started</string>
@@ -37,5 +37,8 @@
     <string name="copyright">Copyright</string>
     <string name="kosoft_inc_2018">Kosoft Inc, 2018</string>
     <string name="contact_us">Contact us</string>
+    <string name="saved_on">Watched on</string>
+    <string name="file_provider_authority" translatable="false">com.ko.wastatus.fileprovider</string>
     <string name="msg_from_dev">\"This app used to save your favourite whatsapp status which was posted by your friends. Whatsapp stories are categorized into Images ,Videos and Saved one. This app made for simple and beautiful UI to make every user very comfortable. And most importantly, this app will be ad - free forever. Share the app to your friends and spread your love.\"</string>
+    <string name="saved_on_save">Saved on</string>
 </resources>

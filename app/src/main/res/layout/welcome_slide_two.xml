@@ -2,17 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/red_500">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.ko.wastatus.ui.FontedTextView
+    <com.ko.statussaver.ui.FontedTextView
         android:layout_marginTop="40dp"
         android:textSize="22sp"
         android:padding="5dp"
         app:typeface="fabrica"
         android:gravity="center"
         android:textColor="@color/gen_white"
-        android:text="Welcome to Whatsapp Status Saver"
+        android:text="Welcome to Status Saver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -23,7 +22,7 @@
         android:layout_centerInParent="true"
         android:src="@drawable/gallery" />
 
-    <com.ko.wastatus.ui.FontedTextView
+    <com.ko.statussaver.ui.FontedTextView
         android:textSize="16sp"
         android:padding="10dp"
         app:typeface="fabrica"

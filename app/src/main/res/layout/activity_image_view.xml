@@ -7,7 +7,7 @@
     tools:context=".home.activities.ImageViewActivity">
 
 
-    <com.ko.wastatus.ui.TouchImageView
+    <com.ko.statussaver.ui.TouchImageView
         android:id="@+id/img_full_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

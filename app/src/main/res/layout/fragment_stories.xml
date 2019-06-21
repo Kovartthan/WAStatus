@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_error_outline_red_500_48dp" />
 
-            <com.ko.wastatus.ui.FontedTextView
+            <com.ko.statussaver.ui.FontedTextView
                 android:id="@+id/error_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

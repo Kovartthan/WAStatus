@@ -13,7 +13,7 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="AppTheme.PopupOverlay">
+    <style name="AppTheme.PopupOverlay" >
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/red_500</item>
         <item name="colorPrimaryDark">@color/red_800</item>

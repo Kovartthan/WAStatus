@@ -40,18 +40,16 @@
 
     </FrameLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="5dp">
 
-        <com.ko.wastatus.ui.FontedTextView
+        <com.ko.statussaver.ui.FontedTextView
             android:id="@+id/img_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:drawableLeft="@drawable/ic_file_download_red_500_24dp"
             android:gravity="center"
             android:paddingLeft="5dp"
@@ -65,12 +63,10 @@
         <!--android:layout_width="1dp"-->
         <!--android:layout_height="wrap_content"/>-->
 
-        <com.ko.wastatus.ui.FontedTextView
+        <com.ko.statussaver.ui.FontedTextView
             android:id="@+id/img_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/img_upload"
             android:drawableLeft="@drawable/ic_share_red_500_24dp"
             android:gravity="center"
             android:paddingLeft="5dp"
@@ -78,6 +74,16 @@
             android:textColor="@color/stay_color"
             android:textSize="12sp"
             app:typeface="fabrica" />
+
+        <com.ko.statussaver.ui.FontedTextView
+        android:id="@+id/txt_date"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end|center_vertical"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/gen_black"
+        android:textSize="14sp"
+        app:typeface="fabrica" />
     </LinearLayout>
 
 
